@@ -49,16 +49,15 @@ options = odeset('RelTol',1e-4,'MaxStep',1e-2);
 e_nom = e;
 gain_nom = gain;
 %% Compute Energy
-q1nom = x(:,1);
-q2nom = x(:,2);
-p1nom = x(:,3);
-p2nom = x(:,4);
+q1 = x(:,1);
+q2 = x(:,2);
+p1 = x(:,3);
+p2 = x(:,4);
 
-Hnom = (p1nom.^2)./(2*m1) + (p2nom.^2)./(2*m2) - m1*gamma.*q1nom -m2*gamma.*q2nom;
+H = (p1.^2)./(2*m1) + (p2.^2)./(2*m2) - m1*gamma.*q1 -m2*gamma.*q2;
 
-save('Data_nom.mat');
 %% Monte Carlo
-N_mc = 1000;
+N_mc = 100;
 DATA(N_mc) = struct();
 i = 1;
 j = 1;
@@ -69,7 +68,6 @@ while i <= N_mc
     Sigma = 1e0;
     dx0 = Sigma*randn(4,1);
     x0n = x0 + dx0;
-    
     if ~c(x0n)
         j = j+1;
         continue
@@ -81,8 +79,6 @@ while i <= N_mc
     [ti,ji,xi] = HyEQsolver(@f,@g,@c,@d,...
                      x0n,TSPAN,JSPAN,rule,options,'ode23');
     
-    Hi = (xi(:,3).^2)./(2*m1) + (xi(:,4).^2)./(2*m2) - m1*gamma.*xi(:,1) -m2*gamma.*xi(:,2);
-    
     DATA(i).x0n = dx0;
     DATA(i).x0n = x0n;
     DATA(i).ti = ti;
@@ -90,13 +86,11 @@ while i <= N_mc
     DATA(i).xi = xi;
     DATA(i).e = e;
     DATA(i).gain = gain;
-    DATA(i).Hi = Hi;
     
     bounces_MC = min(bounces_MC,length(e));
     i = i+1;
     j = j+1;
 end
-save('DATA_MC1000.mat');
 
 figure(1)
 subplot(221)
@@ -128,26 +122,22 @@ subplot(224)
     plot(t,x(:,4),'k','LineWidth',2)
     hold off
 
-figure(2)
+figure(1)
 subplot(211)
-    cla
     hold on
     for i = 1:N_mc
-        scatter(DATA(i).xi(1,1),DATA(i).xi(1,3),'.r')
         pp = plot(DATA(i).xi(:,1),DATA(i).xi(:,3),'b', 'LineWidth',2);
         pp.Color(4) = 0.005;
     end
-    %plot(q1,p1,'k')
+    plot(q1,p1,'k')
     hold off
 subplot(212)
-    cla
     hold on
     for i = 1:N_mc
-        scatter(DATA(i).xi(1,2),DATA(i).xi(1,4),'.r')
         pp = plot(DATA(i).xi(:,2),DATA(i).xi(:,4),'b', 'LineWidth',2);
         pp.Color(4) = 0.005;
     end
-    %plot(q2,p2,'k')
+    plot(q2,p2,'k')
     hold off
 
 %{
@@ -170,13 +160,12 @@ subplot(122)
 %}
 
 figure(3)
-
 subplot(211)
     hold on
     for i = 1:N_mc
         plot(DATA(i).e(2:end),'b')
     end
-    plot(e_nom,'k','LineWidth',2)
+    %plot(e_nom,'k','LineWidth',2)
     hold off
 subplot(212)
     hold on

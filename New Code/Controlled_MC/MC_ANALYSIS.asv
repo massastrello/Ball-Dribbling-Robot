@@ -1,7 +1,7 @@
 clear R
 clear Ts
 
-T = 0:1e-4:t(end);
+T = 0:1e-2:t(end);
 ts_nom = resample(timeseries(x,t),T);
 
 
@@ -35,7 +35,7 @@ for i = 1:N_mc
     p2tot = [p2tot,ts_i.Data(:,4)];
 end
 
-figure(1)
+figure()
 subplot(211)
     hold on
     for i = 1:N_mc
@@ -47,10 +47,10 @@ subplot(211)
 subplot(212)
     hold on
     for i = 1:N_mc
-        pp = plot(q2tot(:,i),p2tot(:,i),'b', 'LineWidth',2);
+        pp = plot(q1tot(:,i),p1tot(:,i),'b', 'LineWidth',2);
         pp.Color(4) = 0.01;
     end
-    plot(ts_nom.Data(:,2),ts_nom.Data(:,4),'k')
+    plot(ts_nom.Data(:,1),ts_nom.Data(:,3),'k')
     hold off
     
 

@@ -28,7 +28,7 @@
 %   Date:    30/04/2018                                                   %
 %   E-mail:  vicmarcag (at) gmail (dot) com                               %
 % ----------------------------------------------------------------------- %
-function plot_areaerrorbar(data, options)
+function [data_mean,data_std] = plot_areaerrorbar(data, options)
 
     % Default options
     if(nargin<2)
