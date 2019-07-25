@@ -1,0 +1,37 @@
+close all 
+clear all
+
+%% Physical Variables
+global gamma c_i c_g m1 m2 flag_j
+gamma = -9.81;  % gravity constant
+c_i = 0.8;     % restitution coefficien robot-ball
+c_g = 0.7;     % restitution coefficient ball-ground
+m1 = 10;       % mass of the robot
+m2 = 1;       % mass of the ball
+
+%% Initial Conditions
+q1_0 = 2;
+q2_0 = 1;
+p1_0 = 0;
+p2_0 = 0;
+x0 = [q1_0;q2_0;p1_0;p2_0];
+
+%% Simulation Horizon
+TSPAN = [0,1000];
+JSPAN = [0,2000];
+
+%% Rule for Jumps
+% rule = 1 -> priority for jumps
+% rule = 2 -> priority for flows
+rule = 1;
+
+%% Simulate
+options = odeset('RelTol',1e-6,'MaxStep',1e-4);
+
+[t j x] = HyEQsolver(@f,@g,@c,@d,...
+                     x0,TSPAN,JSPAN,rule,options);
+                 
+%% Plot Solution
+figure(1)
+clf
+subplot(2,1,1), plotHarc(t,j)
