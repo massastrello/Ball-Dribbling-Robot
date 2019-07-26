@@ -58,7 +58,7 @@ Hnom = (p1nom.^2)./(2*m1) + (p2nom.^2)./(2*m2) - m1*gamma.*q1nom -m2*gamma.*q2no
 
 save('Data_nom.mat');
 %% Monte Carlo
-N_mc = 1000;
+N_mc = 100;
 DATA(N_mc) = struct();
 i = 1;
 j = 1;
@@ -96,7 +96,7 @@ while i <= N_mc
     i = i+1;
     j = j+1;
 end
-save('DATA_MC1000.mat');
+save('DATA_MC100.mat');
 
 figure(1)
 subplot(221)
