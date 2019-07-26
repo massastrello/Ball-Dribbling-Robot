@@ -57,14 +57,14 @@ function [data_mean,data_std] = plot_areaerrorbar(data, options)
     end
     
     % Plotting the result
-    figure(options.handle);
+    %figure(options.handle);
     x_vector = [options.x_axis', fliplr(options.x_axis')];
     patch = fill(x_vector, [data_mean+error,fliplr(data_mean-error)], options.color_area);
     set(patch, 'edgecolor', 'none');
     set(patch, 'FaceAlpha', options.alpha);
-    hold on;
+    %hold on;
     plot(options.x_axis, data_mean, 'color', options.color_line, ...
         'LineWidth', options.line_width);
-    hold off;
+    %hold off;
     
 end
