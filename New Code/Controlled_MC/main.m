@@ -43,7 +43,7 @@ rule = 1;
 %% Simulate
 options = odeset('RelTol',1e-4,'MaxStep',1e-2);
 
-[t,j,x] = HyEQsolver(@f,@g,@c,@d,...
+[t,jnom,x] = HyEQsolver(@f,@g,@c,@d,...
                      x0,TSPAN,JSPAN,rule,options,'ode23');
 
 e_nom = e;
@@ -98,34 +98,55 @@ while i <= N_mc
 end
 save('DATA_MC100.mat');
 
+%% Plots
+modificatorF{1} = 'k';               modificatorF{2} = 'LineWidth'; 
+modificatorF{3} = 1.5;               modificatorJ{1} = '-.';
+modificatorJ{2} = 'LineWidth';       modificatorJ{3} = 1.5;
+modificatorJ{4} = 'Marker';          modificatorJ{5} = 'o';
+modificatorJ{6} = 'MarkerEdgeColor'; modificatorJ{7} = 'r'; 
+modificatorJ{8} = 'MarkerFaceColor'; modificatorJ{9} = 'r';
+modificatorJ{10} = 'MarkerSize';     modificatorJ{11} = 2;
+
 figure(1)
 subplot(221)
+    box on
     hold on
     for i = 1:N_mc
-        plot(DATA(i).ti,DATA(i).xi(:,1),'b')
+        pp = plot(DATA(i).ti,DATA(i).xi(:,1),'b');
+        pp.Color(4) = 0.01;
     end
-    plot(t,x(:,1),'k','LineWidth',2)
+    %plot(t,x(:,1),':k','LineWidth',1.5)
+    plotHarc(t,jnom,x(:,1),[],modificatorF,modificatorJ);
     hold off
 subplot(222)
+    box on
     hold on
     for i = 1:N_mc
-        plot(DATA(i).ti,DATA(i).xi(:,2),'b')
+        pp = plot(DATA(i).ti,DATA(i).xi(:,2),'b');
+        pp.Color(4) = 0.01;
     end
-    plot(t,x(:,2),'k','LineWidth',2)
+    %plot(t,x(:,2),':k','LineWidth',1.5)
+    plotHarc(t,jnom,x(:,2),[],modificatorF,modificatorJ);
     hold off
 subplot(223)
+    box on
     hold on
     for i = 1:N_mc
-        plot(DATA(i).ti,DATA(i).xi(:,3),'b')
+        pp = plot(DATA(i).ti,DATA(i).xi(:,3),'b');
+        pp.Color(4) = 0.01;
     end
-    plot(t,x(:,3),'k','LineWidth',2)
+    %plot(t,x(:,3),':k','LineWidth',1.5)
+    plotHarc(t,jnom,x(:,3),[],modificatorF,modificatorJ);
     hold off
 subplot(224)
+    box on
     hold on
     for i = 1:N_mc
-        plot(DATA(i).ti,DATA(i).xi(:,4),'b')
+        pp = plot(DATA(i).ti,DATA(i).xi(:,4),'b');
+        pp.Color(4) = 0.01;
     end
-    plot(t,x(:,4),'k','LineWidth',2)
+    %plot(t,x(:,4),':k','LineWidth',1.5)
+    plotHarc(t,jnom,x(:,4),[],modificatorF,modificatorJ);
     hold off
 
 figure(2)
@@ -137,7 +158,7 @@ subplot(211)
         pp = plot(DATA(i).xi(:,1),DATA(i).xi(:,3),'b', 'LineWidth',2);
         pp.Color(4) = 0.005;
     end
-    %plot(q1,p1,'k')
+    plot(q1nom,p1nom,':k')
     hold off
 subplot(212)
     cla
@@ -147,7 +168,7 @@ subplot(212)
         pp = plot(DATA(i).xi(:,2),DATA(i).xi(:,4),'b', 'LineWidth',2);
         pp.Color(4) = 0.005;
     end
-    %plot(q2,p2,'k')
+    plot(q2nom,p2nom,':k')
     hold off
 
 %{

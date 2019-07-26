@@ -79,6 +79,19 @@ hold on
 plot(T,ts_nom.Data(:,2),'w','LineWidth',1)
 hold off
 
+%% Waterfall
+figure()
+[X,Y] = meshgrid(centers{1},centers{2});
+surf(X,Y,Xt','EdgeColor','none','FaceColor','interp')
+
+i = 51;
+figure()
+hold on
+while i>0
+area(T,10.*Xt(:,i)+i*0.1,'FaceColor','w','EdgeColor','k')
+i = i-1;
+end
+
 %{
 figure(2)
 hold on
