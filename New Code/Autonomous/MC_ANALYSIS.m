@@ -11,6 +11,96 @@ R(N_mc) = struct();
 Ts(N_mc) = struct();
 Ttot = [];
 Xtot = [];
+
+for i = 1:N_mc
+    x_init(i,:) = DATA(i).xi(1,:);
+    x_end(i,:) = DATA(i).xi(end,:);
+    ts_i = resample(timeseries(DATA(i).xi,DATA(i).ti),T);
+    ri = ts_i.Data - ts_nom.Data;
+    R(i).ri = ri;
+    Ts(i).x = ts_i.Data;
+    %Ttot = [Ttot;DATA(i).ti];
+    %Xtot = [Xtot;DATA(i).xi];
+end
+        
+%% Phase Gram
+clear Pd
+Pd(4) = struct();
+%binWidth = 0.05;
+for i = 1:4
+    binCtrs = linspace(lb(i),ub(i),30);%lb(i):binWidth:ub(i);
+    n=length(T);
+    Xj = zeros(N_mc,1);
+    Xi = zeros(length(T),length(binCtrs));
+    for j = 1:length(T)
+        parfor k = 1:N_mc
+            Xj(k) = Ts(k).x(j,i);
+        end
+        Xi(j,:) = hist(Xj,binCtrs)/N_mc;
+    end     
+    Pd(i).Xi = Xi;
+    % plot
+    centers = {T,binCtrs};
+    [X,Y] = meshgrid(centers{1},centers{2});
+    figure()
+    waterfall(X,Y,Xi')
+    colormap gray
+    view([0,-1,1])
+end 
+
+centers = {T,binCtrs};
+figure()
+imagesc(centers{:}, Xt.')
+colorbar
+axis xy
+hold on
+plot(T,ts_nom.Data(:,1),'w','LineWidth',1)
+hold off
+
+%% Waterfall
+
+figure()
+waterfall(X,Y,Xt')
+colormap gray
+view([0,-1,1])
+
+%{
+figure()
+subplot(211)
+    [X,Y] = meshgrid(centers{1},centers{2});
+    surf(X,Y,Xt','EdgeColor','none','FaceColor','interp')
+subplot(212)
+    i = length(binCtrs);
+    hold on
+    while i>0
+        area(T,1.*Xt(:,i)+i*0.05,'FaceColor','w','EdgeColor','k')
+        i = i-1;
+    end
+%
+%
+figure()
+[X,Y] = meshgrid(centers{1},centers{2});
+surf(X,Y,Xt','EdgeColor','none','FaceColor','interp')
+
+[Xq,Yq] = meshgrid(T,0:0.005:1.8);
+Xtq = interp2(X,Y,Xt',Xq,Yq,'cubic');
+figure()
+surf(Xq,Yq,Xtq,'EdgeColor','none','FaceColor','interp')
+
+%}
+
+
+%{
+T = 0:1e-3:t(end);
+ts_nom = resample(timeseries(x,t),T);
+
+
+x_init = zeros(N_mc,4);
+x_end = zeros(N_mc,4);
+R(N_mc) = struct();
+Ts(N_mc) = struct();
+Ttot = [];
+Xtot = [];
 for i = 1:N_mc
     x_init(i,:) = DATA(i).xi(1,:);
     x_end(i,:) = DATA(i).xi(end,:);
@@ -71,3 +161,4 @@ Data = x_end(:,2); %just making up some junk data
    prob = counts /n;
    H = bar(binCtrs,prob,'hist');
    set(H,'facecolor',[0.5 0.5 0.5]);
+%}

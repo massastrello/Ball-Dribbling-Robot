@@ -64,7 +64,7 @@ i = 1;
 j = 1;
 bounces_MC = length(e); %count the minimum number of ball bounces among all the Monte Carlo runs
 while i <= N_mc
-    disp(['Iteration: ',num2str(i),'.',num2str(j)])
+    disp(['Iteration: ',num2str(i),'.',num2str(j),'/',num2str(N_mc)])
     rng(j)
     Sigma = 1e0;
     dx0 = Sigma*randn(4,1);
