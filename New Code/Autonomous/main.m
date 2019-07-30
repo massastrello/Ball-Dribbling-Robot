@@ -55,12 +55,12 @@ Hnom = (p1nom.^2)./(2*m1) + (p2nom.^2)./(2*m2) - m1*gamma.*q1nom -m2*gamma.*q2no
 save('Data_nom.mat');
 
 %% Monte Carlo Silulation
-N_mc = 1000;
+N_mc = 100;
 DATA = struct();
 options = odeset('RelTol',1e-3,'MaxStep',1e-1);
 
 disp('MONTE CARLO SIMULATION:')
-parfor i = 1:N_mc
+for i = 1:N_mc
     clc
     disp(['Iteration: ',num2str(i),'/',num2str(N_mc)])
     rng(i)

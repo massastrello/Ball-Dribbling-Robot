@@ -11,18 +11,29 @@ R(N_mc) = struct();
 Ts(N_mc) = struct();
 Ttot = [];
 Xtot = [];
+H0 = zeros(N_mc,1);
 
 for i = 1:N_mc
     x_init(i,:) = DATA(i).xi(1,:);
     x_end(i,:) = DATA(i).xi(end,:);
     ts_i = resample(timeseries(DATA(i).xi,DATA(i).ti),T);
-    ri = ts_i.Data - ts_nom.Data;
-    R(i).ri = ri;
+    %ri = ts_i.Data - ts_nom.Data;
+    %R(i).ri = ri;
     Ts(i).x = ts_i.Data;
+    H0(i) = (x_init(i,3).^2)./(2*m1) + (x_init(i,4).^2)./(2*m2) - m1*gamma.*x_init(i,1) -m2*gamma.*x_init(i,2);
     %Ttot = [Ttot;DATA(i).ti];
     %Xtot = [Xtot;DATA(i).xi];
 end
-        
+
+%% Energy probability
+figure()
+pd = fitdist(H0,'Kernel');
+x_values = 4.16:0.0001:4.18;
+y = pdf(pd,x_values);
+histogram(H0)
+hold on
+plot(x_values,y,'LineWidth',2)
+hold off
 %% Phase Gram
 clear Pd
 Pd(4) = struct();
@@ -33,7 +44,7 @@ for i = 1:4
     Xj = zeros(N_mc,1);
     Xi = zeros(length(T),length(binCtrs));
     for j = 1:length(T)
-        parfor k = 1:N_mc
+        for k = 1:N_mc
             Xj(k) = Ts(k).x(j,i);
         end
         Xi(j,:) = hist(Xj,binCtrs)/N_mc;

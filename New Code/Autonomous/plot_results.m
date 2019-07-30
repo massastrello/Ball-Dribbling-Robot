@@ -1,7 +1,7 @@
 alpha = 0.01;
 skip = 1;
 trace_color = [243 169 114]./255;
-N_plot = 1000;
+N_plot = N_mc;
 set(groot,{'DefaultAxesXColor','DefaultAxesYColor','DefaultAxesZColor'},{'k','k','k'})
 modificatorF{1} = 'k';               modificatorF{2} = 'LineWidth'; 
 modificatorF{3} = 1.5;               modificatorJ{1} = '-.';
@@ -10,7 +10,7 @@ modificatorJ{4} = 'Marker';          modificatorJ{5} = 'o';
 modificatorJ{6} = 'MarkerEdgeColor'; modificatorJ{7} = 'r'; 
 modificatorJ{8} = 'MarkerFaceColor'; modificatorJ{9} = 'r';
 modificatorJ{10} = 'MarkerSize';     modificatorJ{11} = 1;
-
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 figure(1)
