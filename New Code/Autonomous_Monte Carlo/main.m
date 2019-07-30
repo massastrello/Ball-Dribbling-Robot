@@ -11,12 +11,12 @@ close all
 %% Physical Variables
 global gamma c_i c_g m1 m2 b1 b2
 gamma = -9.81;  % gravity constant
-c_i = 1;%0.99;       % restitution coefficien robot-ball
-c_g = 1;%0.99;       % restitution coefficient ball-ground
+c_i = 0.99;%0.99;       % restitution coefficien robot-ball
+c_g = 0.99;%0.99;       % restitution coefficient ball-ground
 m1 = .1;        % mass of the robot
 m2 = .15;       % mass of the ball
-b1 = 0.0;
-b2 = 0.0;
+b1 = 0.01;
+b2 = 0.01;
 
 %% Initial Conditions
 q1_0 = 2;
