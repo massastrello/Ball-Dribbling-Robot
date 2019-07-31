@@ -4,6 +4,7 @@
 % -1: the system is integrated with a nominal initial condition (x0)
 % -2: a Monte Carlo
 % Simulation has been performed initial
+%addpath('/functions')
 
 clear all
 close all 
@@ -11,12 +12,12 @@ close all
 %% Physical Variables
 global gamma c_i c_g m1 m2 b1 b2
 gamma = -9.81;  % gravity constant
-c_i = 0.99;%0.99;       % restitution coefficien robot-ball
-c_g = 0.99;%0.99;       % restitution coefficient ball-ground
+c_i = 1;%0.99;       % restitution coefficien robot-ball
+c_g = 1;%0.99;       % restitution coefficient ball-ground
 m1 = .1;        % mass of the robot
 m2 = .15;       % mass of the ball
-b1 = 0.01;
-b2 = 0.01;
+b1 = 0.0;
+b2 = 0.0;
 
 %% Initial Conditions
 q1_0 = 2;
@@ -55,7 +56,7 @@ Hnom = (p1nom.^2)./(2*m1) + (p2nom.^2)./(2*m2) - m1*gamma.*q1nom -m2*gamma.*q2no
 save('Data_nom.mat');
 
 %% Monte Carlo Silulation
-N_mc = 100;
+N_mc = 3000;
 DATA = struct();
 options = odeset('RelTol',1e-3,'MaxStep',1e-1);
 
@@ -81,7 +82,7 @@ for i = 1:N_mc
     DATA(i).xi = xi;
     DATA(i).Hi = Hi;
 end
-save('DATA200A_conservative','DATA')
+save('DATA3000A_conservative')
 
 
 

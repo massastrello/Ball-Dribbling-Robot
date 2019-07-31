@@ -1,3 +1,5 @@
+close all
+
 alpha = 0.01;
 skip = 1;
 trace_color = [243 169 114]./255;
@@ -121,6 +123,7 @@ subplot(221)
     %h = image(xlim,ylim,I); 
     h = image('CData',I,'XData',[0 20],'YData',fliplr(ylim));
     uistack(h,'bottom')
+    scatter(0,q1nom(1),15,'b','filled')
     plotHarc(t,jnom,x(:,1),[],modificatorF,modificatorJ);
     hold off
     %
@@ -143,6 +146,7 @@ subplot(222)
     %h = image(xlim,ylim,I); 
     h = image('CData',I,'XData',[0 20],'YData',fliplr(ylim));
     uistack(h,'bottom')
+    scatter(0,q2nom(1),15,'b','filled')
     plotHarc(t,jnom,x(:,2),[],modificatorF,modificatorJ);
     hold off
     %
@@ -165,6 +169,7 @@ subplot(223)
     %h = image(xlim,ylim,I); 
     h = image('CData',I,'XData',[0 20],'YData',fliplr(ylim));
     uistack(h,'bottom')
+    scatter(0,p1nom(1),15,'b','filled')
     plotHarc(t,jnom,x(:,3),[],modificatorF,modificatorJ);
     hold off
     %
@@ -187,6 +192,7 @@ subplot(224)
     %h = image(xlim,ylim,I); 
     h = image('CData',I,'XData',[0 20],'YData',fliplr(ylim));
     uistack(h,'bottom')
+    scatter(0,p2nom(1),15,'b','filled')
     plotHarc(t,jnom,x(:,4),[],modificatorF,modificatorJ);
     hold off
     %
@@ -203,7 +209,7 @@ subplot(224)
         'Layer', 'Top')
     
 % save figure
-export_fig chaos1.pdf -q101 -transparent
+%export_fig chaos1.pdf -q101 -transparent
 %}
 %{
 figure(1)
@@ -294,7 +300,7 @@ print -dpdf -r300 -painters traj.pdf
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 figure(2)
 set(gcf,'renderer','Painters','color','w')
-subplot(211)
+subplot(121)
     cla
     hold on
     for i = 1:N_plot
@@ -312,7 +318,7 @@ subplot(211)
         'FontSize',9,'FontName','Times','Visible','off')
     F = getframe(gca);
     imwrite(F.cdata, '11ss.png');
-subplot(212)
+subplot(122)
     cla
     hold on
     for i = 1:N_plot
@@ -334,7 +340,7 @@ subplot(212)
 close(2)
 figure(2)
 set(gcf,'renderer','Painters')
-subplot(211)
+subplot(121)
     cla
     xlim([0,5])
     ylim([-1,1])
@@ -342,13 +348,13 @@ subplot(211)
     I = imread('11ss.png');
     h = image('CData',I,'XData',xlim,'YData',fliplr(ylim));
     uistack(h,'bottom')
-    plot(q1nom,p1nom,':k', 'LineWidth',1)
-    scatter(q1nom(1),p1nom(1),'.r')
+    plot(q1nom,p1nom,':k', 'LineWidth',1.5)
+    scatter(q1nom(1),p1nom(1),15,'b','filled')
     hold off
     box on
-    title('Robot Position','Interpreter','latex')
-    xlabel('$t$ [s]','Interpreter','latex')
-    ylabel('$q_1(t)$ [m]','Interpreter','latex')
+    title('Robot State-Space','Interpreter','latex')
+    xlabel('$q_1(t)$ [m]','Interpreter','latex')
+    ylabel('$p_1(t)$ [Kg$\cdot$m$/$s]','Interpreter','latex')
     set(gca,...
         'Units','normalized',...
         'FontUnits','points',...
@@ -356,7 +362,7 @@ subplot(211)
         'FontSize',9,...
         'FontName','Times',...
         'Layer', 'Top')    
-subplot(212)
+subplot(122)
     cla
     xlim([0,2])
     ylim([-1.5,1.5])
@@ -364,13 +370,13 @@ subplot(212)
     I = imread('21ss.png'); 
     h = image('CData',I,'XData',xlim,'YData',fliplr(ylim));
     uistack(h,'bottom')
-    plot(q2nom,p2nom,':k', 'LineWidth',1)
-    scatter(q2nom(1),p2nom(1),'.r')
+    plot(q2nom,p2nom,':k', 'LineWidth',1.5)
+    scatter(q2nom(1),p2nom(1),15,'b','filled')
     hold off
     box on
     title('Ball State-Space','Interpreter','latex')
-    xlabel('$q_1(t)$ [m]','Interpreter','latex')
-    ylabel('$p_1(t)$ [Kg$\cdot$m$/$s]','Interpreter','latex')
+    xlabel('$q_2(t)$ [m]','Interpreter','latex')
+    ylabel('$p_2(t)$ [Kg$\cdot$m$/$s]','Interpreter','latex')
     set(gca,...
         'Units','normalized',...
         'FontUnits','points',...
@@ -380,7 +386,7 @@ subplot(212)
         'Layer', 'Top')
     
 % save figure
-export_fig chaos2.pdf -q101 -transparent
+%export_fig chaos2.pdf -q101 -transparent
 %{
 figure(2)
 set(gcf,'renderer','Painters')
@@ -433,9 +439,48 @@ set(gcf,'renderer','Painters')
 cla
 hold on
 for i = 1:N_plot
-    scatter(DATA(i).ti(1),DATA(i).Hi(1),'.r')
-    pp = plot(DATA(i).ti,DATA(i).Hi,'b', 'LineWidth',1);
+    %scatter(DATA(i).ti(1),DATA(i).Hi(1),'.r')
+    pp = plot(DATA(i).ti,DATA(i).Hi,'Color',trace_color, 'LineWidth',1);
     pp.Color(4) = alpha;
+    pp2 = scatter(0,DATA(i).Hi(1),15,'b','filled');
+    pp2.MarkerFaceAlpha = alpha;
 end
+%
+box on
+xlim([0,20])
+ylim([4.16,4.18])  
+hold off
+title('Ball State-Space','Interpreter','latex')
+xlabel('$q_2(t)$ [m]','Interpreter','latex')
+ylabel('$p_2(t)$ [Kg$\cdot$m$/$s]','Interpreter','latex')
+set(gca, 'Units','normalized','FontUnits','points','FontWeight','normal',...
+'FontSize',9,'FontName','Times','Visible','off')
+F = getframe(gca);
+imwrite(F.cdata, 'H.png');
+close(3)
+
+figure(3)
+box on
+xlim([0,20])
+ylim([4.16,4.18]) 
+hold on
+I = imread('H.png'); 
+h = image('CData',I,'XData',xlim,'YData',fliplr(ylim));
+uistack(h,'bottom')
 plotHarc(t,jnom,Hnom,[],modificatorF,modificatorJ);
 hold off
+box on
+title('System''s Energy','Interpreter','latex')
+xlabel('$t$ [s]','Interpreter','latex')
+ylabel('$\mathcal{H}(t)$ [J]','Interpreter','latex')
+set(gca,...
+    'Units','normalized',...
+    'FontUnits','points',...
+    'FontWeight','normal',...
+    'FontSize',9,...
+    'FontName','Times',...
+    'Layer', 'Top')
+%
+export_fig chaos3.pdf -q101 -transparent
+%
+delete '11.png' '12.png' '21.png' '22.png' '11ss.png' '21ss.png' 'H.png'
