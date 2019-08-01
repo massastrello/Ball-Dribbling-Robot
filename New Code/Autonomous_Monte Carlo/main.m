@@ -4,7 +4,8 @@
 % -1: the system is integrated with a nominal initial condition (x0)
 % -2: a Monte Carlo
 % Simulation has been performed initial
-%addpath('/functions')
+
+addpath(genpath(pwd))
 
 clear all
 close all 
@@ -39,7 +40,7 @@ rule = 1;
 disp('SIMULATE NOMINAL SYSTEM:')
 options = odeset('RelTol',1e-3,'MaxStep',1e-2);
 
-[t,jnom,x] = HyEQsolver(@f,@g,@c,@d,...
+[t,jnom,x] = HyEQsolver(@f_a,@g_a,@c_a,@d_a,...
                      x0,TSPAN,JSPAN,rule,options,'ode23');
                  
 lb = min(x,[],1);
@@ -69,7 +70,7 @@ for i = 1:N_mc
     dx0 = Sigma*randn(4,1);
     x0n = x0 + dx0;
     
-    [ti,ji,xi] = HyEQsolver(@f,@g,@c,@d,...
+    [ti,ji,xi] = HyEQsolver(@f_a,@g_a,@c_a,@d_a,...
                      x0n,TSPAN,JSPAN,rule,options,'ode23');
                  
     Hi = (xi(:,3).^2)./(2*m1) + (xi(:,4).^2)./(2*m2) - m1*gamma.*xi(:,1) -m2*gamma.*xi(:,2);             
@@ -84,6 +85,8 @@ for i = 1:N_mc
 end
 save('DATA3000A_conservative')
 
+%% Plot Results
+PlotResults
 
 
 
