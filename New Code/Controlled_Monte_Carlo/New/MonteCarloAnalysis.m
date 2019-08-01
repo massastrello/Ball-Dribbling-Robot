@@ -13,6 +13,8 @@ Ttot = [];
 Xtot = [];
 H0 = zeros(N_mc,1);
 Hend = zeros(N_mc,1);
+etot = [];
+gaintot = [];
 
 for i = 1:N_mc
     x_init(i,:) = DATA(i).xi(1,:);
@@ -21,16 +23,50 @@ for i = 1:N_mc
     Ts(i).x = ts_i.Data;
     H0(i) = (x_init(i,3).^2)./(2*m1) + (x_init(i,4).^2)./(2*m2) - m1*gamma.*x_init(i,1) -m2*gamma.*x_init(i,2);
     Hend(i) = (x_end(i,3).^2)./(2*m1) + (x_end(i,4).^2)./(2*m2) - m1*gamma.*x_end(i,1) -m2*gamma.*x_end(i,2);
-    %ri = ts_i.Data - ts_nom.Data;
-    %R(i).ri = ri;
-    %Ttot = [Ttot;DATA(i).ti];
-    %Xtot = [Xtot;DATA(i).xi];
+    etot = [etot,DATA(i).e(1:bounces_MC)];
+    gaintot = [gaintot,DATA(i).gain(1:bounces_MC-1)];
 end
 
+%% Error & Gain
+x_vector = [1:bounces_MC-1, fliplr(1:bounces_MC-1)];
+figure()
+set(gcf,'renderer','Painters','color','w')
+subplot(211)
+    patch = fill(x_vector,...
+            [max(etot(2:end,:),[],2)',fliplr(min(etot(2:end,:),[],2)')],[243 169 114]./255);
+    set(patch, 'edgecolor', 'none');
+    set(patch, 'FaceAlpha', 0.5);
+    hold on
+    [e_mean,e_std] = plot_areaerrorbar(etot(2:end,:)');
+    plot(e_nom(2:end),'k','LineWidth',2)
+    hold off
+    title('Ball Tracking Error','Interpreter','latex')
+    xlabel('$\xi$','Interpreter','latex')
+    ylabel('$e(\xi)$ [m]','Interpreter','latex')
+    set(gca,'Units','normalized','FontUnits','points',...
+            'FontWeight','normal','FontSize',9,...
+            'FontName','Times','Layer', 'Top')
+    
+subplot(212)
+    patch = fill(x_vector,...
+            [max(gaintot,[],2)',fliplr(min(gaintot,[],2)')],[243 169 114]./255);
+    set(patch, 'edgecolor', 'none');
+    set(patch, 'FaceAlpha', 0.5);
+    hold on
+    [gain_mean,gain_std] = plot_areaerrorbar(gaintot');
+    plot(gain_nom,'k','LineWidth',2)
+    hold off
+    title('Energy Shaping Gain','Interpreter','latex')
+    xlabel('$\xi$','Interpreter','latex')
+    ylabel('$\varphi(\xi)$ [N$/$m]','Interpreter','latex')
+    set(gca,'Units','normalized','FontUnits','points',...
+            'FontWeight','normal','FontSize',9,...
+            'FontName','Times','Layer', 'Top')
+        
 %% Phase Gram
 clear Pd
 Pd(4) = struct();
-nbins = 30;
+nbins = 50;
 for i = 1:4
     binCtrs = linspace(lb(i),ub(i),nbins);
     n=length(T);
@@ -52,10 +88,11 @@ figure()
 %
 subplot(4,1,1)
     waterfall(Pd(1).X,Pd(1).Y,Pd(1).Xi')
-    %colormap gray
+    %colormap(flipud(gray))
+    colormap(gray)
     view([0.1,-1,1])
     grid off
-    xlim([0,20])
+    xlim([0,t(end)])
     ylim([lb(1),ub(1)])    
     title('Robot Position','Interpreter','latex')
     xlabel('$t$ [s]','Interpreter','latex')
@@ -66,10 +103,11 @@ subplot(4,1,1)
             'Color','none','ZColor','none')
 subplot(4,1,2)
     waterfall(Pd(2).X,Pd(2).Y,Pd(2).Xi')
-    %colormap gray
+    %colormap(flipud(gray))
+    colormap(gray)
     view([0.1,-1,1])
     grid off
-    xlim([0,20])
+    xlim([0,t(end)])
     ylim([lb(2),ub(2)])      
     title('Ball Position','Interpreter','latex')
     xlabel('$t$ [s]','Interpreter','latex')
@@ -80,11 +118,12 @@ subplot(4,1,2)
             'Color','none','ZColor','none')    
 subplot(4,1,3)
     waterfall(Pd(3).X,Pd(3).Y,Pd(3).Xi')
-    %colormap gray
+    %colormap(flipud(gray))
+    colormap(gray)
     view([0.1,-1,1])
     grid off
-    xlim([0,20])
-    ylim([lb(3),ub(3)])      
+    xlim([0,t(end)])
+    ylim([-10,ub(3)])      
     title('Robot Momentum','Interpreter','latex')
     xlabel('$t$ [s]','Interpreter','latex')
     ylabel('$p_1(t)$ [Kg$\cdot$m$/$s]','Interpreter','latex')
@@ -94,10 +133,11 @@ subplot(4,1,3)
             'Color','none','ZColor','none')
 subplot(4,1,4)
     waterfall(Pd(4).X,Pd(4).Y,Pd(4).Xi')
-    colormap gray
+    %colormap(flipud(gray))
+    colormap(gray)
     view([0.1,-1,1])
     grid off
-    xlim([0,20])
+    xlim([0,t(end)])
     ylim([lb(4),ub(4)])     
     title('Ball Momentum','Interpreter','latex')
     xlabel('$t$ [s]','Interpreter','latex')

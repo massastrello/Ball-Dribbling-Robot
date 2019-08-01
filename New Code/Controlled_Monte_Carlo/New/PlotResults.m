@@ -24,9 +24,14 @@ subplot(221)
         pp = plot(DATA(i).ti(1:skip:end),DATA(i).xi(1:skip:end,1),'Color',trace_color);
         pp.Color(4) = alpha;
     end
+    for i = 1:N_plot
+        pp2 = scatter(0,DATA(i).xi(1,1),15,'b','filled');
+        pp2.MarkerFaceAlpha = alpha;
+    end
     hold off
     %
     box on
+    xlim([0,10])    
     ylim([0,5])    
     title('Robot Position','Interpreter','latex')
     xlabel('$t$ [s]','Interpreter','latex')
@@ -48,9 +53,14 @@ subplot(222)
         pp = plot(DATA(i).ti(1:skip:end),DATA(i).xi(1:skip:end,2),'Color',trace_color);
         pp.Color(4) = alpha;
     end
+    for i = 1:N_plot
+        pp2 = scatter(0,DATA(i).xi(1,2),15,'b','filled');
+        pp2.MarkerFaceAlpha = alpha;
+    end
     %
     box on
-    ylim([0,2])
+    xlim([0,10])
+    ylim([0,5])
     hold off
     title('Ball Position','Interpreter','latex')
     xlabel('$t$ [s]','Interpreter','latex')
@@ -72,10 +82,14 @@ subplot(223)
         pp = plot(DATA(i).ti(1:skip:end),DATA(i).xi(1:skip:end,3),'Color',trace_color);
         pp.Color(4) = alpha;
     end
+    for i = 1:N_plot
+        pp2 = scatter(0,DATA(i).xi(1,3),15,'b','filled');
+        pp2.MarkerFaceAlpha = alpha;
+    end
     hold off
     %
     box on
-    ylim([-1,1])
+    ylim([-15,6])
     title('Robot Momentum','Interpreter','latex')
     xlabel('$t$ [s]','Interpreter','latex')
     ylabel('$p_1(t)$ [Kg$\cdot$m$/$s]','Interpreter','latex')
@@ -91,10 +105,15 @@ subplot(223)
 subplot(224)
     cla
     hold on
+    xlim([0,10])
     ylim([-1.5,1.5])
     for i = 1:N_plot
         pp = plot(DATA(i).ti(1:skip:end),DATA(i).xi(1:skip:end,4),'Color',trace_color);
         pp.Color(4) = alpha;
+    end
+    for i = 1:N_plot
+        pp2 = scatter(0,DATA(i).xi(1,4),15,'b','filled');
+        pp2.MarkerFaceAlpha = alpha;
     end
     hold off
     %
@@ -117,6 +136,7 @@ figure(1)
 set(gcf,'renderer','Painters')
 subplot(221)
     cla
+    xlim([0,10])
     ylim([0,5])
     hold on
     I = imread('11.png'); 
@@ -140,7 +160,8 @@ subplot(221)
         'Layer', 'Top')    
 subplot(222)
     cla
-    ylim([0,2])
+    xlim([0,10])
+    ylim([0,5])
     hold on
     I = imread('12.png'); 
     %h = image(xlim,ylim,I); 
@@ -163,7 +184,8 @@ subplot(222)
         'Layer', 'Top')
 subplot(223)
     cla
-    ylim([-1,1])
+    xlim([0,10])
+    ylim([-15,6])
     hold on
     I = imread('21.png'); 
     %h = image(xlim,ylim,I); 
@@ -186,6 +208,7 @@ subplot(223)
         'Layer', 'Top')
 subplot(224)
     cla    
+    xlim([0,10])
     ylim([-1.5,1.5])
     hold on
     I = imread('22.png'); 
@@ -209,7 +232,7 @@ subplot(224)
         'Layer', 'Top')
     
 % save figure
-%export_fig chaos1.pdf -q101 -transparent
+%export_fig reg1.pdf -q101 -transparent
 %}
 %{
 figure(1)
@@ -307,10 +330,14 @@ subplot(121)
         pp = plot(DATA(i).xi(1:skip:end,1),DATA(i).xi(1:skip:end,3),'Color',trace_color);
         pp.Color(4) = alpha;
     end
+    for i = 1:N_plot
+        pp2 = scatter(DATA(i).xi(1,1),DATA(i).xi(1,3),15,'b','filled');
+        pp2.MarkerFaceAlpha = alpha;
+    end
     hold off
     box on
     xlim([0,5])
-    ylim([-1,1])    
+    ylim([-15,6])    
     title('Robot State-Space','Interpreter','latex')
     xlabel('$q_1(t)$ [m]','Interpreter','latex')
     ylabel('$p_1(t)$ [Kg$\cdot$m$/$s]','Interpreter','latex')
@@ -325,9 +352,13 @@ subplot(122)
         pp = plot(DATA(i).xi(1:skip:end,2),DATA(i).xi(1:skip:end,4),'Color',trace_color);
         pp.Color(4) = alpha;
     end
+    for i = 1:N_plot
+        pp2 = scatter(DATA(i).xi(1,2),DATA(i).xi(1,4),15,'b','filled');
+        pp2.MarkerFaceAlpha = alpha;
+    end
     %
     box on
-    xlim([0,2])
+    xlim([0,5])
     ylim([-1.5,1.5])    
     hold off
     title('Ball State-Space','Interpreter','latex')
@@ -343,7 +374,7 @@ set(gcf,'renderer','Painters')
 subplot(121)
     cla
     xlim([0,5])
-    ylim([-1,1])
+    ylim([-15,6])
     hold on
     I = imread('11ss.png');
     h = image('CData',I,'XData',xlim,'YData',fliplr(ylim));
@@ -364,7 +395,7 @@ subplot(121)
         'Layer', 'Top')    
 subplot(122)
     cla
-    xlim([0,2])
+    xlim([0,5])
     ylim([-1.5,1.5])
     hold on
     I = imread('21ss.png'); 
@@ -386,7 +417,7 @@ subplot(122)
         'Layer', 'Top')
     
 % save figure
-%export_fig chaos2.pdf -q101 -transparent
+%export_fig reg2.pdf -q101 -transparent
 %{
 figure(2)
 set(gcf,'renderer','Painters')
@@ -442,13 +473,15 @@ for i = 1:N_plot
     %scatter(DATA(i).ti(1),DATA(i).Hi(1),'.r')
     pp = plot(DATA(i).ti,DATA(i).Hi,'Color',trace_color, 'LineWidth',1);
     pp.Color(4) = alpha;
+end
+for i = 1:N_plot
     pp2 = scatter(0,DATA(i).Hi(1),15,'b','filled');
     pp2.MarkerFaceAlpha = alpha;
 end
 %
 box on
-xlim([0,20])
-ylim([4.16,4.18])  
+xlim([0,t(end)])
+ylim([0,1000])  
 hold off
 title('Ball State-Space','Interpreter','latex')
 xlabel('$q_2(t)$ [m]','Interpreter','latex')
@@ -461,8 +494,8 @@ close(3)
 
 figure(3)
 box on
-xlim([0,20])
-ylim([4.16,4.18]) 
+xlim([0,t(end)])
+ylim([0,1000])  
 hold on
 I = imread('H.png'); 
 h = image('CData',I,'XData',xlim,'YData',fliplr(ylim));
@@ -481,6 +514,6 @@ set(gca,...
     'FontName','Times',...
     'Layer', 'Top')
 %
-%export_fig chaos3.pdf -q101 -transparent
+%export_fig reg3.pdf -q101 -transparent
 %
 delete '11.png' '12.png' '21.png' '22.png' '11ss.png' '21ss.png' 'H.png'

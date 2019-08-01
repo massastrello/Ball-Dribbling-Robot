@@ -1,6 +1,6 @@
 
 addpath(genpath(pwd))
-
+clc
 clear all
 close all 
 
@@ -60,13 +60,13 @@ p2nom = x(:,4);
 Hnom = (p1nom.^2)./(2*m1) + (p2nom.^2)./(2*m2) - m1*gamma.*q1nom -m2*gamma.*q2nom;
 lb = min(x,[],1);
 ub = max(x,[],1);
-save('Data_nom.mat');
+%save('Data_nom.mat');
 
 %% Monte Carlo
-N_mc = 100;
+N_mc = 3000;
 DATA(N_mc) = struct();
-i = 1;
-j = 1;
+i = 1801;
+j = 3183;
 bounces_MC = length(e); %count the minimum number of ball bounces among all the Monte Carlo runs
 while i <= N_mc
     disp(['Iteration: ',num2str(i),'.',num2str(j),'/',num2str(N_mc)])
@@ -103,7 +103,7 @@ while i <= N_mc
     i = i+1;
     j = j+1;
 end
-save('DATA_MC100.mat');
+save('DATA3000C_Controlled.mat');
 
 PlotResults
 
