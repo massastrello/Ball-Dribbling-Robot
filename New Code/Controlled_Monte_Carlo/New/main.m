@@ -1,4 +1,3 @@
-
 addpath(genpath(pwd))
 clc
 clear all
@@ -63,10 +62,10 @@ ub = max(x,[],1);
 %save('Data_nom.mat');
 
 %% Monte Carlo
-N_mc = 3000;
+N_mc = 4500;
 DATA(N_mc) = struct();
-i = 1801;
-j = 3183;
+i = 3001;
+j = 10183;
 bounces_MC = length(e); %count the minimum number of ball bounces among all the Monte Carlo runs
 while i <= N_mc
     disp(['Iteration: ',num2str(i),'.',num2str(j),'/',num2str(N_mc)])
@@ -103,7 +102,7 @@ while i <= N_mc
     i = i+1;
     j = j+1;
 end
-save('DATA3000C_Controlled.mat');
+save('DATA4500C_Controlled.mat');
 
 PlotResults
 

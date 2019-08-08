@@ -6,9 +6,10 @@ x_plot(3).x = linspace(-15,6,10000); x_plot(4).x = linspace(-3.5,3.5,10000);
 %
 y(4) = struct();
 
-method = 'Kernel';
+method_init = 'Normal';
+method_end = 'Kernel';
 for i = 1:4
-    pd_init = fitdist(x_init(:,i),method);pd_end = fitdist(x_end(:,i),method);
+    pd_init = fitdist(x_init(:,i),method_init);pd_end = fitdist(x_end(:,i),method_end);
     y(i).y_init = pdf(pd_init,x_plot(i).x); 
     y(i).y_end = pdf(pd_end,x_plot(i).x);
 end
