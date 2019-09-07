@@ -9,7 +9,7 @@ gamma = -9.81;  % gravity constant
 c_i = .8;       % restitution coefficien robot-ball
 c_g = .8;       % restitution coefficient ball-ground
 m1 = .1;        % mass of the robot
-m2 = .15;       % mass of the ball
+m2 = 0.05;       % mass of the ball
 q2o = 0;
 p2o = 0;
 e = 0;
@@ -21,16 +21,16 @@ err = [];
 iter = [0,0];
 hit = 0;
 %% Initial Conditions
-q1_0 = 2;
-q2_0 = 1.5;
+q1_0 = .2;
+q2_0 = .15;
 p1_0 = 0;
 p2_0 = 0;
 x0 = [q1_0;q2_0;p1_0;p2_0];
 maxo = q2_0;
 %% Control Variables
-q2md = 1;
-h = .5;
-k = 10;
+q2md = .1;
+h = .05;
+k = 0;
 kc = 1;
 u_i = [];
 %% Simulation Horizon
@@ -43,7 +43,7 @@ JSPAN = [0,200];
 rule = 1;
 
 %% Simulate
-options = odeset('RelTol',1e-4,'MaxStep',1e-2);
+options = odeset('RelTol',1e-4,'MaxStep',1e-3);
 
 [t,jnom,x] = HyEQsolver(@f_c,@g_c,@c_c,@d_c,...
                      x0,TSPAN,JSPAN,rule,options,'ode23');
@@ -62,15 +62,15 @@ ub = max(x,[],1);
 %save('Data_nom.mat');
 
 %% Monte Carlo
-N_mc = 4500;
+N_mc = 10;
 DATA(N_mc) = struct();
-i = 3001;
-j = 10183;
+i = 1;
+j = 1;
 bounces_MC = length(e); %count the minimum number of ball bounces among all the Monte Carlo runs
 while i <= N_mc
     disp(['Iteration: ',num2str(i),'.',num2str(j),'/',num2str(N_mc)])
     rng(j)
-    Sigma = 1e0;
+    Sigma = 1e-1;
     dx0 = Sigma*randn(4,1);
     x0n = x0 + dx0;
     
@@ -80,7 +80,7 @@ while i <= N_mc
     end
     e = 0; c_state = 0; gain = []; gain_i = []; ga = 1; err = []; iter = [0,0];
     hit = 0; q2o = q2_0; p2o = q2_0; maxo = q2_0;
-    q2md = 1; h = .5; k = 10; kc = 1; u_i = [];
+    q2md = 0.1; h = .05; k = 0; kc = 1; u_i = [];
     
     [ti,ji,xi] = HyEQsolver(@f_c,@g_c,@c_c,@d_c,...
                      x0n,TSPAN,JSPAN,rule,options,'ode23');

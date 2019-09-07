@@ -17,9 +17,9 @@ err = [err;q2md-q2];
 [flag,max] = detectmax(q2,p2);
 if flag&&hit
     k = k + 1*(q2md - max);
-    kc = 10*(q2md-max) + 300*k;
+    kc = 10*(q2md-max) + 100*k;
     gain = [gain;kc];
-    gain_i = [gain_i;300*k];
+    gain_i = [gain_i;100*k];
     e = [e;q2md-max];
     hit = 0;
     c_state = 1;
@@ -33,7 +33,7 @@ if ~c_state
     u = -m1*gamma -10000*(q1-q1d+0.00*randn())-(1000)*(p1+ 0.00*randn());
 elseif c_state
     q1d = q2;
-    u = -m1*gamma -10*(kc)*(q1-q1d+ 0.00*randn())-(100/m1)*(p1+ 0.00*randn());
+    u = -m1*gamma -10*(kc)*(q1-q1d+ 0.00*randn())-(0/m1)*(p1+ 0.00*randn());
     iter = [iter;iter(end,1)+1,1];
 else 
    u = 0;

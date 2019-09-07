@@ -1,8 +1,10 @@
 clear x_plot y
+Np = 1e3;
+nomalization = 'probability';
 
 x_plot(4) = struct();
-x_plot(1).x = linspace(0,5,10000); x_plot(2).x = linspace(0,2,10000);
-x_plot(3).x = linspace(-1,1,10000); x_plot(4).x = linspace(-1.5,1.5,10000);
+x_plot(1).x = linspace(0,5,Np); x_plot(2).x = linspace(0,2,Np);
+x_plot(3).x = linspace(-1,1,Np); x_plot(4).x = linspace(-1.5,1.5,Np);
 %
 y(4) = struct();
 
@@ -17,13 +19,13 @@ figure()
 set(gcf,'renderer','Painters','color','w')
 subplot(221)
     yyaxis right
-        histogram(x_end(:,1),'Normalization','pdf');
+        histogram(x_end(:,1),'Normalization',nomalization);
         hold on
         plot(x_plot(1).x,y(1).y_end,'LineWidth',2)
         hold off
         ylabel('$\psi_f(q_1)$','Interpreter','latex')     
     yyaxis left
-        histogram(x_init(:,1),'Normalization','pdf')
+        histogram(x_init(:,1),'Normalization',nomalization)
         hold on
         plot(x_plot(1).x,y(1).y_init,'LineWidth',2)
         ylabel('$\psi_i(q_1)$','Interpreter','latex')   
@@ -36,13 +38,13 @@ subplot(221)
     set(gca, 'SortMethod', 'depth')
 subplot(222)
     yyaxis left
-        histogram(x_init(:,2),'Normalization','pdf')
+        histogram(x_init(:,2),'Normalization',nomalization)
         hold on
         plot(x_plot(2).x,y(2).y_init,'LineWidth',2)
         hold off
         ylabel('$\psi_i(q_2)$','Interpreter','latex')
     yyaxis right
-        histogram(x_end(:,2),'Normalization','pdf')
+        histogram(x_end(:,2),'Normalization',nomalization)
         hold on
         plot(x_plot(2).x,y(2).y_end,'LineWidth',2)
         hold off
@@ -56,13 +58,13 @@ subplot(222)
     set(gca, 'SortMethod', 'depth')    
 subplot(223)
     yyaxis left
-        histogram(x_init(:,3),'Normalization','pdf')
+        histogram(x_init(:,3),'Normalization',nomalization)
         hold on
         plot(x_plot(3).x,y(3).y_init,'LineWidth',2)
         hold off
         ylabel('$\psi_i(p_1)$','Interpreter','latex')
     yyaxis right
-        histogram(x_end(:,3),'Normalization','pdf')
+        histogram(x_end(:,3),'Normalization',nomalization)
         hold on
         plot(x_plot(3).x,y(3).y_end,'LineWidth',2)
         hold off
@@ -75,13 +77,13 @@ subplot(223)
     set(gca, 'SortMethod', 'depth')
 subplot(224)
     yyaxis left
-        histogram(x_init(:,4),'Normalization','pdf')
+        histogram(x_init(:,4),'Normalization',nomalization)
         hold on
         plot(x_plot(4).x,y(4).y_init,'LineWidth',2)
         hold off
         ylabel('$\psi_i(p_2)$','Interpreter','latex')
     yyaxis right
-        histogram(x_end(:,4),'Normalization','pdf')
+        histogram(x_end(:,4),'Normalization',nomalization)
         hold on
         plot(x_plot(4).x,y(4).y_end,'LineWidth',2)
         hold off

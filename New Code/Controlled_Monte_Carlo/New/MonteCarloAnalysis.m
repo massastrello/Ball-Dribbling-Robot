@@ -40,9 +40,10 @@ subplot(211)
     [e_mean,e_std] = plot_areaerrorbar(etot(2:end,:)');
     plot(e_nom(2:end),'k','LineWidth',2)
     hold off
+    xlim([1,19])
     title('Ball Tracking Error','Interpreter','latex')
     xlabel('$\xi$','Interpreter','latex')
-    ylabel('$e(\xi)$ [m]','Interpreter','latex')
+    ylabel('$e(\xi)$','Interpreter','latex')
     set(gca,'Units','normalized','FontUnits','points',...
             'FontWeight','normal','FontSize',9,...
             'FontName','Times','Layer', 'Top')
@@ -56,9 +57,10 @@ subplot(212)
     [gain_mean,gain_std] = plot_areaerrorbar(gaintot');
     plot(gain_nom,'k','LineWidth',2)
     hold off
+    xlim([1,19])
     title('Energy Shaping Gain','Interpreter','latex')
     xlabel('$\xi$','Interpreter','latex')
-    ylabel('$\varphi(\xi)$ [N$/$m]','Interpreter','latex')
+    ylabel('$\varphi_\xi$','Interpreter','latex')
     set(gca,'Units','normalized','FontUnits','points',...
             'FontWeight','normal','FontSize',9,...
             'FontName','Times','Layer', 'Top')

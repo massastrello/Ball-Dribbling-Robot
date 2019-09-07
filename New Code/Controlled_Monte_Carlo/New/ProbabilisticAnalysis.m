@@ -1,8 +1,8 @@
 clear x_plot y
-
+Np = 1e3;
 x_plot(4) = struct();
-x_plot(1).x = linspace(0,5,10000); x_plot(2).x = linspace(0,5,10000);
-x_plot(3).x = linspace(-15,6,10000); x_plot(4).x = linspace(-3.5,3.5,10000);
+x_plot(1).x = linspace(0,5,Np); x_plot(2).x = linspace(0,5,Np);
+x_plot(3).x = linspace(-15,6,Np); x_plot(4).x = linspace(-3.5,3.5,Np);
 %
 y(4) = struct();
 

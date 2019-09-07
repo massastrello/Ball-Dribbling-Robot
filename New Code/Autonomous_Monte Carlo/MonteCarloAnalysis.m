@@ -24,25 +24,28 @@ for i = 1:N_mc
     %ri = ts_i.Data - ts_nom.Data;
     %R(i).ri = ri;
     %Ttot = [Ttot;DATA(i).ti];
-    %Xtot = [Xtot;DATA(i).xi];
 end
 
 %% Phase Gram
-clear Pd
+clear Pd Xmc
 Pd(4) = struct();
+Xmc(4) = struct();
 nbins = 30;
 for i = 1:4
     binCtrs = linspace(lb(i),ub(i),nbins);
     n=length(T);
     Xj = zeros(N_mc,1);
     Xi = zeros(length(T),length(binCtrs));
+    Xmci = zeros(length(T),N_mc);
     for j = 1:length(T)
         for k = 1:N_mc
             Xj(k) = Ts(k).x(j,i);
         end
         Xi(j,:) = hist(Xj,binCtrs)/N_mc;
+        Xmci(j,:) = Xj';
     end     
     Pd(i).Xi = Xi;
+    Xmc(i).Xmc_i = Xmci;
     centers = {T,binCtrs};
     [Pd(i).X,Pd(i).Y] = meshgrid(centers{1},centers{2});
 end 

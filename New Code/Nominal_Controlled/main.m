@@ -2,15 +2,17 @@ clear all
 close all 
 
 %% Physical Variables
-global gamma c_i c_g m1 m2 q2o p2o maxo k e gain ga err kc q2md h iter c_state u_i gain_i hit
+global gamma c_i c_g m1 m2 q2o p2o maxo k e gain ga err kc q2md h iter c_state u_i k_it gain_i hit b1 b2
 gamma = -9.81;  % gravity constant
 c_i = .8;       % restitution coefficien robot-ball
 c_g = .8;       % restitution coefficient ball-ground
 m1 = .1;        % mass of the robot
-m2 = .15;       % mass of the ball
+m2 = 0.05;       % mass of the ball
 q2o = 0;
 p2o = 0;
-e = 0;
+b1 = 0.2;
+b2 = 0.3;
+e = [];
 c_state = 0;
 gain = [];
 gain_i = [];
@@ -18,22 +20,23 @@ ga = 1;
 err = [];
 iter = [0,0];
 hit = 0;
+k_it = [];
 %% Initial Conditions
-q1_0 = 2;
-q2_0 = 1.5;
+q1_0 = .2;
+q2_0 = .15;
 p1_0 = 0;
 p2_0 = 0;
 x0 = [q1_0;q2_0;p1_0;p2_0];
 maxo = q2_0;
 %% Control Variables
-q2md = 1;
-h = .5;
-k = 10;
+q2md = .1;
+h = .05;
+k = 0;
 kc = 1;
 u_i = [];
 %% Simulation Horizon
-TSPAN = [0,20];
-JSPAN = [0,2000];
+TSPAN = [0,5];
+JSPAN = [0,200];
 
 %% Rule for Jumps
 % rule = 1 -> priority for jumps
@@ -41,23 +44,27 @@ JSPAN = [0,2000];
 rule = 1;
 
 %% Simulate
-options = odeset('RelTol',1e-4,'MaxStep',1e-2);
+options = odeset('RelTol',1e-3,'MaxStep',1e-3);
 
-[t,j,x] = HyEQsolver(@f,@g,@c,@d,...
-                     x0,TSPAN,JSPAN,rule,options,'ode23');
+[t,jnom,x] = HyEQsolver(@f,@g,@c,@d,...
+                     x0,TSPAN,JSPAN,rule,options,'ode23tb');
 
 %% Compute Energy
-q1 = x(:,1);
-q2 = x(:,2);
-p1 = x(:,3);
-p2 = x(:,4);
+q1nom = x(:,1);
+q2nom = x(:,2);
+p1nom = x(:,3);
+p2nom = x(:,4);
 
-H = (p1.^2)./(2*m1) + (p2.^2)./(2*m2) - m1*gamma.*q1 -m2*gamma.*q2;
+Hnom = (p1nom.^2)./(2*m1) + (p2nom.^2)./(2*m2) - m1*gamma.*q1nom -m2*gamma.*q2nom;
 
-
+K1 = (p1nom.^2)./(2*m1); V1 = -m1*gamma.*q1nom; H1 = K1 + V1;
+K2 = (p2nom.^2)./(2*m2); V2 = -m2*gamma.*q2nom; H2 = K2 + V2;
+K = K1 + K2; V = V1 + V2;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+plot_results
 %% Plot Solution
-%
+%{
 modificatorF{1} = 'k';
 modificatorF{2} = 'LineWidth';
 modificatorF{3} = 1.5;
@@ -152,7 +159,7 @@ plot(e,'LineWidth',1.5)
 xlabel('cycle')
 ylabel('error')
 %
-%
+%}
 
 
 

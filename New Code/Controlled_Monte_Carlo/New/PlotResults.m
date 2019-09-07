@@ -1,6 +1,6 @@
 close all
 
-alpha = 0.01;
+alpha = 0.1;
 skip = 1;
 trace_color = [243 169 114]./255;
 N_plot = N_mc;
